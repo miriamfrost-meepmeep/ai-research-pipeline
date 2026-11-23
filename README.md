@@ -1,84 +1,71 @@
-# Claude Agents: Build a Multi-Agent Research System in 7 Days
+# AI Research Pipeline: what citations hide
 
-This is the repository for the LinkedIn Learning course `Claude Agents: Build a Multi-Agent Research System in 7 Days`. The full course is available from [LinkedIn Learning][lil-course-url].
+A team of Claude agents researches Chicago housing and writes a cited report. I checked every citation by hand, broke the system on purpose and designed a sixth agent to catch what the checks were missing.
 
-Research work breaks single agents fast. Ask one prompt to search, analyze, synthesize, and cite, and quality collapses at every step. The fix is a team: a coordinator agent delegating to specialists that each do one job well. Over seven days, you build that team with the Claude Agent SDK, one agent at a time, and finish with a five-agent system that produces comprehensive, cited research reports and refines its own work.
+**Built by:** Miriam Frost, product manager · [Portfolio](https://miriamfrost-meepmeep.github.io) · [LinkedIn](https://www.linkedin.com/in/miriam-frost-productmanager/)
+**Course:** Kesha Williams, [*Claude Agents: Build a Multi-Agent Research System in 7 Days*](https://www.linkedin.com/learning/claude-agents-build-a-multi-agent-research-system-in-7-days) (LinkedIn Learning)
+**Status:** Learning project. Not a production system.
 
-![course-name-alt-text][lil-thumbnail-url] 
+**Read the case study first:** [CASE_STUDY.md](CASE_STUDY.md)
 
-## What You Build
- 
-- **Day 1:** A web search agent, your first specialist
-- **Day 2:** An analysis agent and a structured-output contract between the two
-- **Day 3:** A coordinator that delegates work across the team
-- **Day 4:** A synthesis agent with an explicit conflict-resolution policy
-- **Day 5:** A report agent that produces cited Markdown reports
-- **Day 6:** Context management, validation, and failure recovery
-- **Day 7:** An evaluation and refinement loop that grades the report and fills its gaps
-## Before You Start
- 
-You need three things:
- 
-1. **Python 3.10 or later.** Check with `python3 --version`.
-2. **An Anthropic API key.** Create one in the [Claude Console](https://platform.claude.com/). New accounts include trial credits; after that, expect roughly a few dollars in API usage across the full seven days. Day 7's refinement loop is the most expensive single run.
-3. **Basic Python.** Async concepts are explained as they appear.
-## Setup
- 
-Clone this repository, then from its root:
- 
+## What's the course's and what's mine
+
+This repo is a fork of the course's exercise files. The `DAY01` to `DAY07` folders are the course's code, unchanged. My work is in `my-work/`.
+
+| | Course | Mine |
+| --- | --- | --- |
+| Five-agent system (search, analysis, synthesis, report, coordinator) | ✓ | |
+| Validator, evaluator, retry loop, budget caps | ✓ | |
+| Daily challenges, including the Day 6 sabotage step | ✓ | |
+| Research question: Chicago housing progress in 2026 | | ✓ |
+| Day 4: synthesis rule so minority findings aren't dropped | | ✓ |
+| Day 5: hand audit of all 45 citations | | ✓ |
+| Day 6: retries lowered from 3 to 2, budget-trip warning | | ✓ |
+| Day 7: sixth agent design (fact-checker), its prompt and categories | | ✓ |
+| Every number in the case study | | ✓ |
+
+## Results
+
+- **Day 5:** 21 of 45 citations (47%) checked out. 12 misattributed, 6 overstated, 4 fabricated or dead, 2 couldn't be checked.
+- **Day 6:** On an earlier test question, a retry produced a fully fabricated report with 25 references. It passed every check. Lowering retries from 3 to 2 cut the worst case from $12 to $8.
+- **Day 7:** My fact-check agent flagged 7 citations on the first pass and 1 more on the second. 8 across two passes of one run. Score went from 7 to 8 out of 10. The run cost $6.54.
+
+## What's in `my-work/`
+
+| File | What it is |
+| --- | --- |
+| `day04_synthesis_rule.py` | Day 4 with my rule: a minority or opposing finding counts as a conflict and gets its own confidence level. Also prints each agent's result so I could see what it returned. |
+| `day05_report.md` | The Day 5 report I audited. |
+| `day05_citation_audit.md` | My audit of all 45 citations, claim by claim. |
+| `day05_citation_list.md` | All 45 sources with links. |
+| `day06_retry_housing.py` | Day 6 retry loop on my question. Retries set to 2, plus a warning when the budget cap trips. |
+| `day06_retry_first_topic.py` | Same script on the earlier test question, where the fabricated report came from. |
+| `day06_notes.md`, `day06_notes_first_topic.md` | Run-by-run notes from the sabotage tests. |
+| `day07_with_factcheck.py` | The full system plus my sixth agent, built on the course's `day07_end.py`. |
+| `day07_notes.md` | How I designed it, what it caught, what it cost. |
+
+## Run it
+
+You need Python 3.10 or later and an Anthropic API key.
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 export ANTHROPIC_API_KEY=your-key-here   # Windows: set ANTHROPIC_API_KEY=your-key-here
+python my-work/day07_with_factcheck.py
 ```
- 
-The Claude Code CLI ships bundled with the SDK package, so there is nothing else to install.
- 
-To confirm your setup works, run the Day 1 finished agent:
- 
-```bash
-python DAY01/day01_end.py
-```
- 
-If you see search results stream in, followed by a turn count and cost, you are ready.
- 
-## Repository Structure
- 
-Each day has a folder `DAY0X` folder with `begin` and `end` files :
- 
-- **begin** is the code as it stands at the start of that day's video. Every later day begins where the previous day ended.
-- **end** is the completed code from that day's video, and your reference if you get stuck during a challenge.
- 
-Two files worth flagging:
- 
-- `DAY02/day02_begin.py` is broken **on purpose**. The Day 2 challenge is to diagnose and fix it. Do not fix it by peeking at `DAY02/day02_end.py`, at least not on the first try.
-- `DAY07/day07_end.py` is the complete system: five agents, validation, retry logic, and the refinement loop. The final challenge extends it with a sixth agent you design.
-## Working Through a Day
- 
-1. Watch the day's video and build along in the `begin` file.
-2. Complete the day's challenge from the course.
-3. Compare against `end` if you need it.
-4. Share your Daily Win on the [Kesha on AI page](https://www.linkedin.com/company/kesha-on-ai/) with **#7DayClaude**.
 
-Reports generated by Days 5 through 7 are written to `report.md` in whatever folder you run from. 
- 
-## Costs and Care
- 
-Every script in this repository makes real API calls that cost real money. Every agent carries a turn cap, and Days 6 and 7 add budget controls, but you should still watch the cost line each script prints at the end of a run. If you experiment with turn caps or refinement rounds, raise them gradually.
+Every run makes real API calls. A full Day 7 run with refinement cost me about $6.50.
 
-## Instructor
- 
-Kesha Williams 
+## Limits
 
-Kesha Williams is a distinguished tech leader and innovator specializing in AI and machine learning (ML).
+- One research question, one topic.
+- 8 flags across two passes of one run. A small sample.
+- I haven't measured what the fact-check agent missed.
+- Two runs crashed with the same SDK error inside the evaluator, so my with-and-without comparison is incomplete.
+- Costs come from the SDK's estimates, not billing data.
 
-Kesha works at the intersection of AI architecture, engineering, and strategy, with 25+ years of experience designing and delivering complex software and AI systems. She is the founder and managing partner of Keysoft, where she leads AI advisory, engineering, and enablement services that help organizations turn AI ambition into operational reality. An AWS Artificial Intelligence (AI) Hero, Kesha partners with enterprises and technology leaders to adopt AI responsibly, modernize engineering practices, and build AI systems developers can trust and sustain.
+## License
 
-View her other courses at: https://www.linkedin.com/learning/instructors/kesha-williams 
-
-[0]: # (Replace these placeholder URLs with actual course URLs)
-
-[lil-course-url]: https://www.linkedin.com/learning/claude-agents-build-a-multi-agent-research-system-in-7-days
-[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D560DAQE9DusNct4wUw/learning-public-crop_675_1200/B56aBetQo9H0AY-/0/1788295318685?e=2147483647&v=beta&t=p2AnfWw1xhFjbnoCneNjxlj2Le0MazXTWbGeCxgHo9o
-
+The course files are LinkedIn Learning exercise files. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
